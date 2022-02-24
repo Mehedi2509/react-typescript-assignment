@@ -3,7 +3,11 @@ import ReportDisplay from "./ReportDisplay";
 
 interface Todo {
   id: number;
-  text: string;
+  report: {
+      date:string,
+      reportTitle:string,
+      details:string
+  };
 }
 // Todo[]
 type ActionType =
@@ -17,7 +21,7 @@ type ActionType =
           ...state,
           {
             id: state.length,
-            text: action.text,
+            report: action.report,
           },
         ];
       case "REMOVE":
@@ -25,17 +29,20 @@ type ActionType =
     }
   }, []);
 
-  const newTodoRef = useRef<HTMLInputElement>(null);
+  const date = useRef<HTMLInputElement>(null);
+  const reportTitle = useRef<HTMLInputElement>(null);
+  const details = useRef<HTMLInputElement>(null);
 
   // useCallback
   const handleToAddDisplay = useCallback(() => {
-    if (newTodoRef.current) {
+    if (reportTitle.current) {
       dispatch({
         type: "ADD",
-        report:{date:,reportTitle:,details:}
-        text: newTodoRef.current.value,
+        report:{date:date.current?.value,reportTitle:reportTitle.current?.value,details:details.current?.value}
       });
-      newTodoRef.current.value = "";
+      date.current.value = "";
+      reportTitle.current.value = "";
+      details.current.value = "";
     }
   }, []);
 
@@ -59,6 +66,7 @@ type ActionType =
         onSubmit={handleToAddDisplay}
       >
         <input
+        ref={date}
           type="text"
           name="date"
           placeholder="Date"
@@ -71,6 +79,7 @@ type ActionType =
         />
         <br />
         <input
+        ref={reportTitle}
           type="text"
           name="reportTitle"
           placeholder="Report Title"
@@ -83,6 +92,7 @@ type ActionType =
         />
         <br />
         <textarea
+        ref={details}
           placeholder="Write here your report details..."
           style={{
             width: "400px",
